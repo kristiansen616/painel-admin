@@ -1,1 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([[5],{"9a33":function(t,e,n){"use strict";n.r(e);var s=function(){var t=this,e=t.$createElement,n=t._self._c||e;return n("q-page",[n("div",{staticClass:"row"},[n("h1",[t._v("Posts")])])])},a=[],l=n("2877"),c={},o=Object(l["a"])(c,s,a,!1,null,null,null);e["default"]=o.exports}}]);
