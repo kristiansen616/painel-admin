@@ -19,6 +19,7 @@
       @input="dark()"
     />
     <q-icon name="fas fa-sun" />
+    
        <q-btn flat style="color: #ffffff" label="Alertas" @click="alert = true" />
    <q-dialog v-model="alert">
       <q-card>
