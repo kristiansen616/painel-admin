@@ -4,11 +4,11 @@
     <q-form
       @submit="onSubmit"
       @reset="onReset"
-      class="q-gutter-md q-ml-md"
+      class="q-gutter-md"
     >
     <div class="text-h4 doc-h6">Cliente - Busca</div>
     <hr>
-    <div class="row q-gutter-x-md">
+    <div class="row q-gutter-x-md justify-center">
         <div class="col-xs-10 col-sm-6 col-md-5">
       <q-input
         filled
@@ -33,7 +33,7 @@
       />
     </div>
     </div>
-    <div class="row q-gutter-x-md">
+    <div class="row q-gutter-x-md justify-center">
     <div class="col-xs-10 col-sm-6 col-md-5">
        <q-input
         filled
@@ -58,11 +58,10 @@
     </div>
 </div>
 
-<div class="row q-gutter-x-md">
+<div class="row q-gutter-x-md justify-center">
       <div class="col-xs-10 col-sm-6 col-md-5">
-       <q-select filled v-model="situacao" :options="options" label="Situação" />
+       <q-select filled v-model="situacao" :options="['Ativo', 'Inativo']" hint="" label="Situação" />
     </div>
-
     <div class="col-xs-10 col-sm-6 col-md-5">
        <q-input
         filled
@@ -100,13 +99,6 @@
       ]"
     />
 </div>
-<div class="q-pa-lg flex flex-center">
-    <q-pagination
-      v-model="current"
-      :max="5"
-    >
-    </q-pagination>
-  </div>
   </div>
 </template>
 <style>
@@ -129,12 +121,6 @@ export default {
     return {
       current: 1,
       model: null,
-      options: [
-        'Ativo', 'Inativo'
-      ],
-      opcao: [
-        'Areal', 'Rio das Ostras', 'Volta Redonda'
-      ],
       name: null,
       muni: null,
       Doc: null,
@@ -198,12 +184,13 @@ export default {
           field: row => row.name,
           format: val => `${val}`,
           sortable: true,
-          style: 'max-width: 150px',
-          headerStyle: 'height: 50px',
+          style: 'max-width: 400px; height: 70px',
+          classes: 'my-special-class',
+          headerStyle: 'height: 50px; font-size: 20px',
         },
-        { name: 'Endereço', label: 'Endereço', field: 'fat', sortable: true },
+        { name: 'Endereço', label: 'Endereço', field: 'fat', sortable: true},
         { name: 'Bairro', label: 'Bairro', field: 'carbs' },
-        { name: 'Município', label: 'Município', field: 'protein', style: 'height: 60px' },
+        { name: 'Município', label: 'Município', field: 'protein'},
         { name: 'Contato', label: 'Contato', field: 'sodium' },
         { name: 'Opções', label: 'Opções', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
       ],
