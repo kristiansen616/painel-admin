@@ -4,12 +4,12 @@
     <q-form
       @submit="onSubmit"
       @reset="onReset"
-      class="q-gutter-md q-ml-xl"
+      class="q-gutter-md q-ml-md"
     >
     <div class="text-h4 doc-h6">Cliente - Busca</div>
     <hr>
     <div class="row q-gutter-x-md">
-        <div class="col-md-5">
+        <div class="col-xs-10 col-sm-6 col-md-5">
       <q-input
         filled
         v-model="name"
@@ -20,7 +20,7 @@
       />
       </div>
 
-         <div class="col-xs-12 col-sm-6 col-md-5">
+         <div class="col-xs-10 col-sm-6 col-md-5">
        <q-select
          filled
           v-model="muni"
@@ -34,7 +34,7 @@
     </div>
     </div>
     <div class="row q-gutter-x-md">
-    <div class="col-xs-12 col-sm-6 col-md-5">
+    <div class="col-xs-10 col-sm-6 col-md-5">
        <q-input
         filled
         v-model="Doc"
@@ -45,7 +45,7 @@
         :rules="[ val => val && val.length <= 12  || 'Número invalido']"
       />
       </div>
-        <div class="col-md-5">
+        <div class="col-xs-10 col-sm-6 col-md-5">
       <q-input
         filled
         v-model="email"
@@ -59,11 +59,11 @@
 </div>
 
 <div class="row q-gutter-x-md">
-      <div class="col-xs-12 col-sm-6 col-md-5">
+      <div class="col-xs-10 col-sm-6 col-md-5">
        <q-select filled v-model="situacao" :options="options" label="Situação" />
     </div>
 
-    <div class="col-xs-12 col-sm-6 col-md-5">
+    <div class="col-xs-10 col-sm-6 col-md-5">
        <q-input
         filled
         v-model="bairro"
@@ -198,9 +198,7 @@ export default {
           field: row => row.name,
           format: val => `${val}`,
           sortable: true,
-          classes: 'bg-grey-2 ellipsis',
           style: 'max-width: 150px',
-          headerClasses: 'bg-primary text-white',
           headerStyle: 'height: 50px',
         },
         { name: 'Endereço', label: 'Endereço', field: 'fat', sortable: true },

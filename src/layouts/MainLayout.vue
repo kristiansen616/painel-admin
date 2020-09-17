@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated class="bg-dark">
+    <q-header elevated>
       <q-toolbar q-my-md>
         <q-btn
           flat
@@ -12,7 +12,13 @@
         />
 
         <q-space />
-
+         <q-icon name="far fa-moon" />
+      <q-toggle
+        v-model="value"
+      color="yellow"
+      @input="dark()"
+    />
+    <q-icon name="fas fa-sun" />
        <q-btn flat style="color: #ffffff" label="Alertas" @click="alert = true" />
    <q-dialog v-model="alert">
       <q-card>
@@ -35,7 +41,6 @@
     </q-header>
 
     <q-drawer
-      dark
       v-model="leftDrawerOpen"
       show-if-above
       bordered
@@ -43,7 +48,6 @@
       <q-list>
         <q-item-label
           header
-          class="text-white"
         >
           Menu
         </q-item-label>
@@ -81,10 +85,16 @@ export default {
       alert: false,
       confirm: false,
       prompt: false,
+      value: true,
 
       address: '',
       leftDrawerOpen: false,
       essentialLinks: linksData
+    }
+  },
+  methods: {
+    dark (val) {
+      this.$q.dark.toggle(val)
     }
   }
 }
