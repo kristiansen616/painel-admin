@@ -121,9 +121,7 @@ export default {
       prompt: false,
 
       address: '',
-
       separator: 'cell',
-
       columns: [
         {
           name: 'name',
@@ -245,14 +243,14 @@ export default {
           color: 'red-5',
           textColor: 'white',
           icon: 'warning',
-          message: 'You need to accept the license and terms first'
+          message: 'você precisa aceitar a licença e termos de primeira'
         })
       } else {
         this.$q.notify({
           color: 'green-4',
           textColor: 'white',
           icon: 'cloud_done',
-          message: 'Submitted'
+          message: 'Submetido'
         })
       }
     },
