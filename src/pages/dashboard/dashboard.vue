@@ -21,16 +21,7 @@
       </div>
 
          <div class="col-xs-10 col-sm-6 col-md-5">
-       <q-select
-         filled
-          v-model="muni"
-        use-input
-        input-debounce="0"
-        label="Município"
-        :options="['Areal', 'Rio das Ostras', ['Volta Redonda']]"
-        @filter="filterFn"
-        behavior="menu"
-      />
+      <q-select filled v-model="muni" :options="['Areal', 'Rio das Ostras', 'Volta Redonda']" hint="" label="Município" />
     </div>
     </div>
     <div class="row q-gutter-x-md justify-center">
@@ -119,54 +110,12 @@
 export default {
   data () {
     return {
-      current: 1,
-      model: null,
       name: null,
       muni: null,
       Doc: null,
       email: null,
       situacao: null,
       bairro: null,
-      accept: false
-    }
-  },
-
-  methods: {
-    onSubmit () {
-      if (this.sub === true) {
-        this.$q.notify({
-          color: 'red-5',
-          textColor: 'white',
-          icon: 'warning',
-          message: 'você precisa aceitar a licença e termos de primeira'
-        })
-      } else {
-        this.$q.notify({
-          color: 'green-4',
-          textColor: 'white',
-          icon: 'cloud_done',
-          message: 'submetido'
-        })
-      }
-    },
-
-    onReset () {
-      this.name = null
-      this.muni = null
-      this.Doc = null
-      this.email = null
-      this.situacao = null
-      this.bairro = null
-      this.accept = false
-    }
-  }
-}
-</script>
-
-<script>
-export default {
-  data () {
-    return {
       alert: false,
       confirm: false,
       prompt: false,
@@ -186,13 +135,13 @@ export default {
           sortable: true,
           style: 'max-width: 400px; height: 70px',
           classes: 'my-special-class',
-          headerStyle: 'height: 50px; font-size: 20px',
+          headerStyle: 'height: 50px; font-size: 20px'
         },
-        { name: 'Endereço', label: 'Endereço', field: 'fat', sortable: true},
+        { name: 'Endereço', label: 'Endereço', field: 'fat', sortable: true },
         { name: 'Bairro', label: 'Bairro', field: 'carbs' },
-        { name: 'Município', label: 'Município', field: 'protein'},
+        { name: 'Município', label: 'Município', field: 'protein' },
         { name: 'Contato', label: 'Contato', field: 'sodium' },
-        { name: 'Opções', label: 'Opções', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
+        { name: 'Opções', label: 'Opções', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
       ],
       data: [
         {
@@ -286,6 +235,34 @@ export default {
           iron: '22%'
         }
       ]
+    }
+  },
+
+  methods: {
+    onSubmit () {
+      if (this.sub === false) {
+        this.$q.notify({
+          color: 'red-5',
+          textColor: 'white',
+          icon: 'warning',
+          message: 'You need to accept the license and terms first'
+        })
+      } else {
+        this.$q.notify({
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: 'Submitted'
+        })
+      }
+    },
+    onReset () {
+      this.name = null
+      this.muni = null
+      this.Doc = null
+      this.email = null
+      this.situacao = null
+      this.bairro = null
     }
   }
 }
