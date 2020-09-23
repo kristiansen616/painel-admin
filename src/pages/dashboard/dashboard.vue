@@ -185,12 +185,46 @@
         </div>
         <br>
            <div class="q-gutter-sm">
-              <q-btn dense color="primary" icon="edit"/>
+              <q-btn @click="prompt=true" dense color="primary" icon="edit"/>
               <q-btn dense color="red" icon="delete"/>
             </div>
         </q-td>
       </template>
       </q-table>
+           <template>
+    <q-dialog v-model="prompt">
+  <div class="q-pa-md q-gutter-sm">
+    <q-editor v-model="editor" min-height="5rem" :definitions="{
+        save: {
+          tip: 'Save your work',
+          icon: 'save',
+          label: 'Save',
+          handler: saveWork
+        },
+        upload: {
+          tip: 'Upload to cloud',
+          icon: 'cloud_upload',
+          label: 'Upload',
+          handler: uploadIt
+        }
+      }"
+      :toolbar="[
+        ['bold', 'italic', 'strike', 'underline'],
+        ['upload', 'save']
+      ]" />
+
+    <q-card flat bordered>
+      <q-card-section>
+        <pre style="white-space: pre-line">{{ usuario.email }}</pre>
+      </q-card-section>
+    </q-card>
+
+    <q-card flat bordered>
+      <q-card-section v-html="usuario.email" />
+    </q-card>
+  </div>
+  </q-dialog>
+</template>
         </q-card-section>
 
         <q-separator/>
@@ -231,7 +265,8 @@ export default {
         Doc: '',
         email: '',
         situacao: '',
-        bairro: ''
+        bairro: '',
+        editor: ''
       },
       alert: false,
       confirm: false,
@@ -281,6 +316,22 @@ export default {
     },
     enviar () {
       this.sub = true
+    },
+    saveWork () {
+      this.$q.notify({
+        message: 'Saved your text to local storage',
+        color: 'green-4',
+        textColor: 'white',
+        icon: 'cloud_done'
+      })
+    },
+    uploadIt () {
+      this.$q.notify({
+        message: 'Server unavailable. Check connectivity.',
+        color: 'red-5',
+        textColor: 'white',
+        icon: 'warning'
+      })
     }
   }
 }
