@@ -1,10 +1,9 @@
 <template>
-  <div class="q-pa-md">
-
+<q-page class="q-pa-md">
     <q-form
       @submit="onSubmit"
-      @reset="onReset"
       class="q-gutter-md"
+      v-model="sub"
     >
     <div class="text-h4 doc-h6">Cliente - Busca</div>
     <hr>
@@ -12,7 +11,7 @@
         <div class="col-xs-10 col-sm-6 col-md-5">
       <q-input
         filled
-        v-model="name"
+        v-model="usuario.name"
         label="Seu nome*"
         hint="Nome e Sobrenome"
         lazy-rules
@@ -21,25 +20,26 @@
       </div>
 
          <div class="col-xs-10 col-sm-6 col-md-5">
-      <q-select filled v-model="muni" :options="['Areal', 'Rio das Ostras', 'Volta Redonda']" hint="" label="Município" />
+      <q-select filled v-model="usuario.muni" :options="['Areal', 'Rio das Ostras', 'Volta Redonda']" hint="" label="Município" />
     </div>
     </div>
     <div class="row q-gutter-x-md justify-center">
     <div class="col-xs-10 col-sm-6 col-md-5">
        <q-input
         filled
-        v-model="Doc"
+        v-model="usuario.Doc"
         type="number"
         label="Seu Documento*"
         hint="RJ,CNPJ,CPF"
         lazy-rules
+        :key="data.doc"
         :rules="[ val => val && val.length <= 12  || 'Número invalido']"
       />
       </div>
         <div class="col-xs-10 col-sm-6 col-md-5">
       <q-input
         filled
-        v-model="email"
+        v-model="usuario.email"
         type="text"
         label="Seu E-mail*"
         hint="Não esqueça do @"
@@ -51,12 +51,12 @@
 
 <div class="row q-gutter-x-md justify-center">
       <div class="col-xs-10 col-sm-6 col-md-5">
-       <q-select filled v-model="situacao" :options="['Ativo', 'Inativo']" hint="" label="Situação" />
+       <q-select filled v-model="usuario.situacao" :options="['Ativo', 'Inativo']" hint="" label="Situação" />
     </div>
     <div class="col-xs-10 col-sm-6 col-md-5">
        <q-input
         filled
-        v-model="bairro"
+        v-model="usuario.bairro"
         type="text"
         label="Seu Bairro*"
         hint=""
@@ -67,13 +67,14 @@
 </div>
 
       <div class="row justify-center">
-        <q-btn size="15px" class="q-px-xl q-py-xs" label="Enviar" v-model="sub" type="submit" color="primary"/>
+        <q-btn size="15px" class="q-px-xl q-py-xs" label="Pesquisar" @click="enviar" v-model="sub" type="submit" color="primary"/>
       </div>
     </q-form>
     <br>
     <p class="resultado text-center breadcrumb">Foram encontrados 6702 registros, divididos em 336 página(s)</p>
 
  <div class="q-pa-md q-gutter-sm">
+ <q-card>
     <q-table
      v-model="separator"
       title="Treats"
@@ -88,10 +89,118 @@
        // { label: 'Cell', value: 'cell' },
       //{ label: 'None', value: 'none' },
       ]"
-    />
-</div>
-  </div>
+    >
+
+<template v-slot:body-cell-name="props">
+        <q-td :props="props">
+        <div>
+            {{ usuario.name }}
+        </div>
+          <div class="my-table-details">
+            {{ props.row.name }}
+          </div>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-email="props">
+        <q-td :props="props">
+        <div>
+            {{ usuario.email }}
+        </div>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-bairro="props">
+        <q-td :props="props">
+        <div>
+            {{ usuario.bairro }}
+        </div>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-Doc="props">
+        <q-td :props="props">
+        <div>
+            {{ usuario.Doc }}
+        </div>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-muni="props">
+        <q-td :props="props">
+        <div>
+            {{ usuario.muni }}
+        </div>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-situacao="props">
+        <q-td :props="props">
+        <div>
+            {{ usuario.situacao }}
+        </div>
+        </q-td>
+      </template>
+     <template v-slot:body-cell-detail="props">
+          <q-td :props="props">
+            <q-btn @click="employee_dialog=true" dense round color="secondary" icon="pageview"/>
+          </q-td>
+        </template>
+        <template v-slot:body-cell-action="props">
+          <q-td :props="props">
+            <div class="q-gutter-sm">
+              <q-btn dense color="primary" icon="edit"/>
+              <q-btn dense color="red" icon="delete"/>
+            </div>
+          </q-td>
+        </template>
+         </q-table>
+    </q-card>
+ <q-dialog v-model="employee_dialog">
+      <q-card class="my-card" flat bordered>
+        <q-card-section>
+          <div class="text-h6">
+            Employee Details
+            <q-btn round flat dense icon="close" class="float-right" color="grey-8" v-close-popup></q-btn>
+          </div>
+        </q-card-section>
+        <q-card-section horizontal>
+          <q-card-section class="q-pt-xs">
+
+          </q-card-section>
+          <q-table
+          v-model="separator"
+          dense
+          :data="data"
+          :columns="columns"
+          row-key="email"
+          :separator="separator"
+          :options="[
+          // { label: 'Horizontal', value: 'horizontal' },
+          // { label: 'Vertical', value: 'vertical' },
+          // { label: 'Cell', value: 'cell' },
+          //{ label: 'None', value: 'none' },
+        ]"
+    >
+
+        <template v-slot:body-cell-email="props">
+        <q-td :props="props">
+        <div>
+            {{ usuario.email }}
+        </div>
+        <br>
+           <div class="q-gutter-sm">
+              <q-btn dense color="primary" icon="edit"/>
+              <q-btn dense color="red" icon="delete"/>
+            </div>
+        </q-td>
+      </template>
+      </q-table>
+        </q-card-section>
+
+        <q-separator/>
+
+      </q-card>
+    </q-dialog>
+    </div>
+ </q-page>
 </template>
+
 <style>
 .resultado {
     font-family: Arial;
@@ -105,20 +214,30 @@
     background-color: #f5f5f5;
     border-radius: 4px;
 }
+.my-table-details {
+  font-size: 1.1em;
+  max-width: 100px;
+  white-space: normal;
+  margin-top: 4px;
+}
 </style>
 <script>
 export default {
   data () {
     return {
-      name: null,
-      muni: null,
-      Doc: null,
-      email: null,
-      situacao: null,
-      bairro: null,
+      usuario: {
+        name: '',
+        muni: '',
+        Doc: '',
+        email: '',
+        situacao: '',
+        bairro: ''
+      },
       alert: false,
       confirm: false,
       prompt: false,
+      employee_dialog: false,
+      sub: false,
 
       address: '',
       separator: 'cell',
@@ -126,111 +245,26 @@ export default {
         {
           name: 'name',
           required: true,
-          label: 'Nome/Razão',
-          align: 'left',
+          label: 'Nome',
+          align: 'center',
           field: row => row.name,
           format: val => `${val}`,
           sortable: true,
-          style: 'max-width: 400px; height: 70px',
+          style: 'height: 70px',
           classes: 'my-special-class',
-          headerStyle: 'height: 50px; font-size: 20px'
+          headerStyle: 'height: 50px;'
         },
-        { name: 'Endereço', label: 'Endereço', field: 'fat', sortable: true },
-        { name: 'Bairro', label: 'Bairro', field: 'carbs' },
-        { name: 'Município', label: 'Município', field: 'protein' },
-        { name: 'Contato', label: 'Contato', field: 'sodium' },
-        { name: 'Opções', label: 'Opções', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
+        { name: 'muni', label: 'Município', field: 'fat', sortable: true, align: 'center' },
+        { name: 'Doc', label: 'Documento', field: 'carbs', align: 'center' },
+        { name: 'email', label: 'E-mail', field: 'protein', align: 'center' },
+        { name: 'situacao', label: 'Situação', field: 'sodium', align: 'center' },
+        { name: 'bairro', label: 'Bairro', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10), align: 'center' },
+        { name: 'detail', label: 'Detalhes', field: 'detail', sortable: true, align: 'center' },
+        { name: 'action', label: 'Ações', field: 'action', sortable: true, align: 'center' }
       ],
       data: [
         {
-          name: 'RADIO IMAGEM RADIOLOGIA LTDA',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          sodium: 87,
-          calcium: '14%',
-          iron: '1%'
-        },
-        {
-          name: 'Lilian Cristina Salgueiro',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          sodium: 129,
-          calcium: '8%',
-          iron: '1%'
-        },
-        {
-          name: 'ASSISTÊNCIA MÉDICA IMAGEM EIRELI -ME',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          sodium: 337,
-          calcium: '6%',
-          iron: '7%'
-        },
-        {
-          name: 'CAF CENTRO DE ATENDIMENTO FISIOTERÁPICO',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          sodium: 413,
-          calcium: '3%',
-          iron: '8%'
-        },
-        {
-          name: 'HOSPITAL POPULAR DE MEDICINA VETERINÁRIA LTDA',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          sodium: 327,
-          calcium: '7%',
-          iron: '16%'
-        },
-        {
-          name: 'SENCE & CHAMMA CLÍNICA ODONTOLOGICA LTDA-ME',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          sodium: 50,
-          calcium: '0%',
-          iron: '0%'
-        },
-        {
-          name: 'A4 CLÍNICA ODONTOLÓGICA LTDA.',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          sodium: 38,
-          calcium: '0%',
-          iron: '2%'
-        },
-        {
-          name: 'CENTRO ODONTOLOGICO SORRIA RIO QUEIMADOS LTDA',
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-          sodium: 562,
-          calcium: '0%',
-          iron: '45%'
-        },
-        {
-          name: 'Mayene Bittencourt Burity',
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          sodium: 326,
-          calcium: '2%',
-          iron: '22%'
+
         }
       ]
     }
@@ -238,29 +272,15 @@ export default {
 
   methods: {
     onSubmit () {
-      if (this.sub === false) {
-        this.$q.notify({
-          color: 'red-5',
-          textColor: 'white',
-          icon: 'warning',
-          message: 'você precisa aceitar a licença e termos de primeira'
-        })
-      } else {
-        this.$q.notify({
-          color: 'green-4',
-          textColor: 'white',
-          icon: 'cloud_done',
-          message: 'Submetido'
-        })
-      }
+      this.$q.notify({
+        message: 'Submetido',
+        color: 'green-4',
+        icon: 'cloud_done',
+        textcolor: 'white'
+      })
     },
-    onReset () {
-      this.name = null
-      this.muni = null
-      this.Doc = null
-      this.email = null
-      this.situacao = null
-      this.bairro = null
+    enviar () {
+      this.sub = true
     }
   }
 }
